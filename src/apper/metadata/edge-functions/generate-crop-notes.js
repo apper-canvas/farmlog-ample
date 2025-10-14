@@ -1,6 +1,97 @@
-import apper from 'https://cdn.apper.io/actions/apper-actions.js';
-import OpenAI from 'npm:openai';
+import apper from 'https://cdn.apper.io/actions/apper-actions.js'
+import OpenAI from 'npm:openai'
 
+apper.serve(async (req) => {
+  try {
+    // Retrieve OpenAI API key from secrets
+    const apiKey = await apper.getSecret('OPENAI_API_KEY');
+    
+    if (!apiKey) {
+      return new Response(JSON.stringify({
+        success: false,
+        message: 'OpenAI API key not configured. Please add OPENAI_API_KEY to your Edge Function secrets.'
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Initialize OpenAI client with retrieved API key
+    const openai = new OpenAI({
+      apiKey: apiKey
+    });
+
+    // Parse request body
+    const body = await req.json();
+    
+    if (!body || !body.cropName || !body.cropType) {
+      return new Response(JSON.stringify({
+        success: false,
+        message: 'Missing required fields: cropName and cropType are required'
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const { cropName, cropType, plantingDate, expectedHarvest } = body;
+
+    // Generate crop notes using OpenAI
+    const prompt = `Generate detailed farming notes for the following crop:
+
+Crop Name: ${cropName}
+Crop Type: ${cropType}
+${plantingDate ? `Planting Date: ${plantingDate}` : ''}
+${expectedHarvest ? `Expected Harvest: ${expectedHarvest}` : ''}
+
+Please provide:
+1. Optimal growing conditions (soil, water, sunlight, temperature)
+2. Common pests and diseases to watch for
+3. Recommended care schedule (watering, fertilizing, pruning)
+4. Harvesting tips and timing
+5. Storage recommendations
+
+Keep the notes practical, concise, and suitable for a farm management application.`;
+
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are an experienced agricultural advisor helping farmers manage their crops effectively.'
+        },
+        {
+          role: 'user',
+          content: prompt
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 500
+    });
+
+    const notes = completion.choices[0].message.content;
+
+    return new Response(JSON.stringify({
+      success: true,
+      data: {
+        notes: notes,
+        generatedAt: new Date().toISOString()
+      }
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (error) {
+    return new Response(JSON.stringify({
+      success: false,
+      message: error.message || 'Failed to generate crop notes'
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+});
 apper.serve(async (req) => {
   try {
     // Only accept POST requests
