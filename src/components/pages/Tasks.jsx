@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import Button from "@/components/atoms/Button";
+import Modal from "@/components/atoms/Modal";
 import Card from "@/components/atoms/Card";
 import FormField from "@/components/molecules/FormField";
 import TaskCard from "@/components/molecules/TaskCard";
@@ -133,7 +134,7 @@ const Tasks = () => {
     setShowAddForm(true);
   };
 
-  const resetForm = () => {
+const resetForm = () => {
     setFormData({
       farmId: selectedFarm ? selectedFarm.Id.toString() : "",
       cropId: "",
@@ -216,126 +217,125 @@ const Tasks = () => {
         </div>
       </Card>
 
-      {/* Add/Edit Form */}
-      {showAddForm && (
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            {editingTask ? "Edit Task" : "Add New Task"}
-          </h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {!selectedFarm && (
-              <FormField
-                label="Farm"
-                type="select"
-                value={formData.farmId}
-                onChange={(e) => setFormData({ ...formData, farmId: e.target.value, cropId: "" })}
-                required
-              >
-                <option value="">Select a farm</option>
-                {availableFarms.map((farm) => (
-                  <option key={farm.Id} value={farm.Id}>
-                    {farm.name} - {farm.location}
-                  </option>
-                ))}
-              </FormField>
-            )}
-            
+{/* Add/Edit Form Modal */}
+      <Modal
+        isOpen={showAddForm}
+        onClose={resetForm}
+        title={editingTask ? "Edit Task" : "Add New Task"}
+      >
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {!selectedFarm && (
             <FormField
-              label="Related Crop (Optional)"
+              label="Farm"
               type="select"
-              value={formData.cropId}
-              onChange={(e) => setFormData({ ...formData, cropId: e.target.value })}
+              value={formData.farmId}
+              onChange={(e) => setFormData({ ...formData, farmId: e.target.value, cropId: "" })}
+              required
             >
-              <option value="">General farm task</option>
-              {availableCrops.map((crop) => (
-                <option key={crop.Id} value={crop.Id}>
-                  {crop.name} - {crop.variety}
+              <option value="">Select a farm</option>
+              {availableFarms.map((farm) => (
+                <option key={farm.Id} value={farm.Id}>
+                  {farm.name} - {farm.location}
                 </option>
               ))}
             </FormField>
+          )}
+          
+          <FormField
+            label="Related Crop (Optional)"
+            type="select"
+            value={formData.cropId}
+            onChange={(e) => setFormData({ ...formData, cropId: e.target.value })}
+          >
+            <option value="">General farm task</option>
+            {availableCrops.map((crop) => (
+              <option key={crop.Id} value={crop.Id}>
+                {crop.name} - {crop.variety}
+              </option>
+            ))}
+          </FormField>
 
-            <FormField
-              label="Task Title"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder="e.g., Water tomatoes, Check irrigation"
-              required
-              className={!selectedFarm ? "" : "md:col-span-2"}
+          <FormField
+            label="Task Title"
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            placeholder="e.g., Water tomatoes, Check irrigation"
+            required
+            className={!selectedFarm ? "" : "md:col-span-2"}
+          />
+
+          <FormField
+            label="Task Type"
+            type="select"
+            value={formData.type}
+            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+            options={[
+              { value: "watering", label: "Watering" },
+              { value: "fertilizing", label: "Fertilizing" },
+              { value: "planting", label: "Planting" },
+              { value: "harvesting", label: "Harvesting" },
+              { value: "inspection", label: "Inspection" },
+              { value: "maintenance", label: "Maintenance" },
+              { value: "pest_control", label: "Pest Control" }
+            ]}
+          />
+
+          <FormField
+            label="Due Date"
+            type="date"
+            value={formData.dueDate}
+            onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+            required
+          />
+
+          <FormField
+            label="Priority"
+            type="select"
+            value={formData.priority}
+            onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
+            options={[
+              { value: "low", label: "Low" },
+              { value: "medium", label: "Medium" },
+              { value: "high", label: "High" }
+            ]}
+          />
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="recurring"
+              checked={formData.recurring}
+              onChange={(e) => setFormData({ ...formData, recurring: e.target.checked })}
+              className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
             />
+            <label htmlFor="recurring" className="text-sm font-medium text-gray-700">
+              Recurring Task
+            </label>
+          </div>
 
-            <FormField
-              label="Task Type"
-              type="select"
-              value={formData.type}
-              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-              options={[
-                { value: "watering", label: "Watering" },
-                { value: "fertilizing", label: "Fertilizing" },
-                { value: "planting", label: "Planting" },
-                { value: "harvesting", label: "Harvesting" },
-                { value: "inspection", label: "Inspection" },
-                { value: "maintenance", label: "Maintenance" },
-                { value: "pest_control", label: "Pest Control" }
-              ]}
-            />
+          <FormField
+            label="Notes"
+            type="textarea"
+            value={formData.notes}
+            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+            placeholder="Optional notes about this task..."
+            className="md:col-span-2"
+          />
 
-            <FormField
-              label="Due Date"
-              type="date"
-              value={formData.dueDate}
-              onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-              required
-            />
-
-            <FormField
-              label="Priority"
-              type="select"
-              value={formData.priority}
-              onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-              options={[
-                { value: "low", label: "Low" },
-                { value: "medium", label: "Medium" },
-                { value: "high", label: "High" }
-              ]}
-            />
-
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="recurring"
-                checked={formData.recurring}
-                onChange={(e) => setFormData({ ...formData, recurring: e.target.checked })}
-                className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
-              />
-              <label htmlFor="recurring" className="text-sm font-medium text-gray-700">
-                Recurring Task
-              </label>
-            </div>
-
-            <FormField
-              label="Notes"
-              type="textarea"
-              value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="Optional notes about this task..."
-              className="md:col-span-2"
-            />
-
-            <div className="md:col-span-2 flex justify-end space-x-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={resetForm}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">
-                {editingTask ? "Update Task" : "Add Task"}
-              </Button>
-            </div>
-          </form>
-        </Card>
-      )}
+          <div className="md:col-span-2 flex justify-end space-x-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={resetForm}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">
+              {editingTask ? "Update Task" : "Add Task"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Tasks List */}
       {filteredTasks.length === 0 ? (
@@ -348,7 +348,7 @@ const Tasks = () => {
           icon="CheckSquare"
           action={filterStatus === "all" ? {
             label: "Add Task",
-            onClick: () => setShowAddForm(true),
+onClick: () => setShowAddForm(true),
             icon: "Plus"
           } : {
             label: "View All Tasks",
