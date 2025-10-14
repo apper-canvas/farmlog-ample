@@ -23,14 +23,13 @@ const Expenses = () => {
   const [editingExpense, setEditingExpense] = useState(null);
   const [availableFarms, setAvailableFarms] = useState([]);
   const [monthlyTotal, setMonthlyTotal] = useState(0);
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     farmId: "",
     category: "supplies",
     amount: "",
     date: new Date().toISOString().split('T')[0],
 description: "",
-    paymentMethod: "cash",
-    test: ""
+    paymentMethod: "cash"
   });
 
   useEffect(() => {
@@ -100,27 +99,25 @@ description: "",
 
   const handleEdit = (expense) => {
     setEditingExpense(expense);
-    setFormData({
+setFormData({
       farmId: expense.farmId,
       category: expense.category,
       amount: expense.amount.toString(),
 date: expense.date,
       description: expense.description,
-      paymentMethod: expense.paymentMethod,
-      test: expense.test
+      paymentMethod: expense.paymentMethod
     });
     setShowAddForm(true);
   };
 
   const resetForm = () => {
-    setFormData({
+setFormData({
       farmId: selectedFarm ? selectedFarm.Id.toString() : "",
       category: "supplies",
       amount: "",
 date: new Date().toISOString().split('T')[0],
       description: "",
-      paymentMethod: "cash",
-      test: ""
+      paymentMethod: "cash"
     });
     setShowAddForm(false);
     setEditingExpense(null);
@@ -303,13 +300,6 @@ date: new Date().toISOString().split('T')[0],
               { value: "debit card", label: "Debit Card" },
               { value: "bank transfer", label: "Bank Transfer" }
             ]}
-          />
-          <FormField
-            label="Test"
-            type="text"
-            value={formData.test}
-            onChange={(e) => setFormData({ ...formData, test: e.target.value })}
-            placeholder="Enter test value"
           />
 
           <div className="md:col-span-2 flex justify-end space-x-3">
