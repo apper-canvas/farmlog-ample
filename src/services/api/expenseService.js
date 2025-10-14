@@ -15,8 +15,9 @@ export const expenseService = {
           {"field": {"Name": "category_c"}},
           {"field": {"Name": "amount_c"}},
           {"field": {"Name": "date_c"}},
-          {"field": {"Name": "description_c"}},
+{"field": {"Name": "description_c"}},
           {"field": {"Name": "payment_method_c"}},
+          {"field": {"Name": "test_c"}},
           {"field": {"name": "farm_id_c"}, "referenceField": {"field": {"Name": "Name"}}}
         ],
         orderBy: [{"fieldName": "date_c", "sorttype": "DESC"}]
@@ -33,8 +34,9 @@ export const expenseService = {
         category: expense.category_c,
         amount: expense.amount_c,
         date: expense.date_c,
-        description: expense.description_c || expense.Name,
-        paymentMethod: expense.payment_method_c
+description: expense.description_c || expense.Name,
+        paymentMethod: expense.payment_method_c,
+        test: expense.test_c
       }));
     } catch (error) {
       console.error("Error fetching expenses:", error?.response?.data?.message || error);
@@ -52,7 +54,8 @@ export const expenseService = {
           {"field": {"Name": "amount_c"}},
           {"field": {"Name": "date_c"}},
           {"field": {"Name": "description_c"}},
-          {"field": {"Name": "payment_method_c"}},
+{"field": {"Name": "payment_method_c"}},
+          {"field": {"Name": "test_c"}},
           {"field": {"name": "farm_id_c"}, "referenceField": {"field": {"Name": "Name"}}}
         ],
         where: [{"FieldName": "farm_id_c", "Operator": "EqualTo", "Values": [parseInt(farmId)]}],
@@ -70,8 +73,9 @@ export const expenseService = {
         category: expense.category_c,
         amount: expense.amount_c,
         date: expense.date_c,
-        description: expense.description_c || expense.Name,
-        paymentMethod: expense.payment_method_c
+description: expense.description_c || expense.Name,
+        paymentMethod: expense.payment_method_c,
+        test: expense.test_c
       }));
     } catch (error) {
       console.error("Error fetching expenses by farm:", error?.response?.data?.message || error);
@@ -127,7 +131,8 @@ export const expenseService = {
           {"field": {"Name": "amount_c"}},
           {"field": {"Name": "date_c"}},
           {"field": {"Name": "description_c"}},
-          {"field": {"Name": "payment_method_c"}},
+{"field": {"Name": "payment_method_c"}},
+          {"field": {"Name": "test_c"}},
           {"field": {"name": "farm_id_c"}, "referenceField": {"field": {"Name": "Name"}}}
         ]
       });
@@ -144,8 +149,9 @@ export const expenseService = {
         category: expense.category_c,
         amount: expense.amount_c,
         date: expense.date_c,
-        description: expense.description_c || expense.Name,
-        paymentMethod: expense.payment_method_c
+description: expense.description_c || expense.Name,
+        paymentMethod: expense.payment_method_c,
+        test: expense.test_c
       };
     } catch (error) {
       console.error("Error fetching expense:", error?.response?.data?.message || error);
@@ -160,10 +166,11 @@ export const expenseService = {
           Name: expenseData.description,
           farm_id_c: parseInt(expenseData.farmId),
           category_c: expenseData.category,
-          amount_c: parseFloat(expenseData.amount),
+amount_c: parseFloat(expenseData.amount),
           date_c: expenseData.date,
           description_c: expenseData.description,
-          payment_method_c: expenseData.paymentMethod
+          payment_method_c: expenseData.paymentMethod,
+          test_c: expenseData.test
         }]
       });
 
@@ -185,9 +192,10 @@ export const expenseService = {
           farmId: created.farm_id_c?.Id?.toString() || expenseData.farmId,
           category: created.category_c,
           amount: created.amount_c,
-          date: created.date_c,
+date: created.date_c,
           description: created.description_c || created.Name,
-          paymentMethod: created.payment_method_c
+          paymentMethod: created.payment_method_c,
+          test: created.test_c
         };
       }
     } catch (error) {
@@ -205,9 +213,10 @@ export const expenseService = {
           farm_id_c: parseInt(expenseData.farmId),
           category_c: expenseData.category,
           amount_c: parseFloat(expenseData.amount),
-          date_c: expenseData.date,
+date_c: expenseData.date,
           description_c: expenseData.description,
-          payment_method_c: expenseData.paymentMethod
+          payment_method_c: expenseData.paymentMethod,
+          test_c: expenseData.test
         }]
       });
 
@@ -227,10 +236,11 @@ export const expenseService = {
         return {
           Id: updated.Id,
           farmId: updated.farm_id_c?.Id?.toString() || expenseData.farmId,
-          category: updated.category_c,
+category: updated.category_c,
           amount: updated.amount_c,
           date: updated.date_c,
           description: updated.description_c || updated.Name,
+          test: updated.test_c,
           paymentMethod: updated.payment_method_c
         };
       }

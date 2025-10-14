@@ -28,8 +28,9 @@ const Expenses = () => {
     category: "supplies",
     amount: "",
     date: new Date().toISOString().split('T')[0],
-    description: "",
-    paymentMethod: "cash"
+description: "",
+    paymentMethod: "cash",
+    test: ""
   });
 
   useEffect(() => {
@@ -103,9 +104,10 @@ const Expenses = () => {
       farmId: expense.farmId,
       category: expense.category,
       amount: expense.amount.toString(),
-      date: expense.date,
+date: expense.date,
       description: expense.description,
-      paymentMethod: expense.paymentMethod
+      paymentMethod: expense.paymentMethod,
+      test: expense.test
     });
     setShowAddForm(true);
   };
@@ -115,9 +117,10 @@ const Expenses = () => {
       farmId: selectedFarm ? selectedFarm.Id.toString() : "",
       category: "supplies",
       amount: "",
-      date: new Date().toISOString().split('T')[0],
+date: new Date().toISOString().split('T')[0],
       description: "",
-      paymentMethod: "cash"
+      paymentMethod: "cash",
+      test: ""
     });
     setShowAddForm(false);
     setEditingExpense(null);
@@ -288,7 +291,7 @@ const Expenses = () => {
             className="md:col-span-2"
           />
 
-          <FormField
+<FormField
             label="Payment Method"
             type="select"
             value={formData.paymentMethod}
@@ -300,6 +303,13 @@ const Expenses = () => {
               { value: "debit card", label: "Debit Card" },
               { value: "bank transfer", label: "Bank Transfer" }
             ]}
+          />
+          <FormField
+            label="Test"
+            type="text"
+            value={formData.test}
+            onChange={(e) => setFormData({ ...formData, test: e.target.value })}
+            placeholder="Enter test value"
           />
 
           <div className="md:col-span-2 flex justify-end space-x-3">
