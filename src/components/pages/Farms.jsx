@@ -134,7 +134,7 @@ unit: "acres",
         onClose={resetForm}
         title={editingFarm ? "Edit Farm" : "Add New Farm"}
       >
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+<form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             label="Farm Name"
             value={formData.name}
@@ -168,8 +168,17 @@ unit: "acres",
               { value: "hectares", label: "Hectares" },
               { value: "square_feet", label: "Square Feet" }
             ]}
-/>
-<FormField
+          />
+          <FormField
+            label="Current Amount"
+            type="number"
+            step="0.01"
+            value={formData.currentAmount}
+            onChange={(e) => setFormData({ ...formData, currentAmount: e.target.value })}
+            placeholder="$0.00"
+            required
+          />
+          <FormField
             label="Soil Type"
             type="select"
             name="soilType"
@@ -242,13 +251,21 @@ unit: "acres",
                 </div>
               </div>
 
-              <div className="space-y-3">
+<div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Size:</span>
                   <span className="font-medium">
                     {farm.size} {farm.unit}
                   </span>
-</div>
+                </div>
+                {farm.currentAmount && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Current Amount:</span>
+                    <span className="font-medium">
+                      ${parseFloat(farm.currentAmount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                )}
                 {farm.soilType && (
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Soil Type:</span>
