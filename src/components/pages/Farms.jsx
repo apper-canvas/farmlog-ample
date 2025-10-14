@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
-import Button from "@/components/atoms/Button";
-import Card from "@/components/atoms/Card";
-import Modal from "@/components/atoms/Modal";
-import FormField from "@/components/molecules/FormField";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
-import ApperIcon from "@/components/ApperIcon";
+import React, { useEffect, useState } from "react";
 import { farmService } from "@/services/api/farmService";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
+import ApperIcon from "@/components/ApperIcon";
+import Loading from "@/components/ui/Loading";
+import Empty from "@/components/ui/Empty";
+import Error from "@/components/ui/Error";
+import Crops from "@/components/pages/Crops";
+import Tasks from "@/components/pages/Tasks";
+import Button from "@/components/atoms/Button";
+import Modal from "@/components/atoms/Modal";
+import Card from "@/components/atoms/Card";
+import FormField from "@/components/molecules/FormField";
 
 const Farms = () => {
   const [farms, setFarms] = useState([]);
@@ -17,11 +19,13 @@ const Farms = () => {
   const [error, setError] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingFarm, setEditingFarm] = useState(null);
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     name: "",
     size: "",
     unit: "acres",
-    location: ""
+    location: "",
+    soilType: "",
+    currentAmount: ""
   });
 
   useEffect(() => {
@@ -45,16 +49,18 @@ const Farms = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (editingFarm) {
+if (editingFarm) {
         await farmService.update(editingFarm.Id, {
           ...formData,
-          size: parseFloat(formData.size)
+          size: parseFloat(formData.size),
+          currentAmount: formData.currentAmount ? parseFloat(formData.currentAmount) : 0
         });
         toast.success("Farm updated successfully");
       } else {
-        await farmService.create({
+await farmService.create({
           ...formData,
-          size: parseFloat(formData.size)
+          size: parseFloat(formData.size),
+          currentAmount: formData.currentAmount ? parseFloat(formData.currentAmount) : 0
         });
         toast.success("Farm added successfully");
       }
@@ -82,8 +88,10 @@ const Farms = () => {
     setFormData({
       name: farm.name,
       size: farm.size.toString(),
-      unit: farm.unit,
-      location: farm.location
+unit: farm.unit,
+      location: farm.location,
+      soilType: farm.soilType || "",
+      currentAmount: farm.currentAmount || ""
     });
     setShowAddForm(true);
   };
@@ -92,8 +100,10 @@ const resetForm = () => {
     setFormData({
       name: "",
       size: "",
-      unit: "acres",
-      location: ""
+unit: "acres",
+      location: "",
+      soilType: "",
+      currentAmount: ""
     });
     setShowAddForm(false);
     setEditingFarm(null);
@@ -157,6 +167,19 @@ const resetForm = () => {
               { value: "acres", label: "Acres" },
               { value: "hectares", label: "Hectares" },
               { value: "square_feet", label: "Square Feet" }
+            ]}
+/>
+<FormField
+            label="Soil Type"
+            type="select"
+            name="soilType"
+            value={formData.soilType}
+            onChange={(e) => setFormData({ ...formData, soilType: e.target.value })}
+            options={[
+              { value: "", label: "Select soil type" },
+              { value: "sandy", label: "Sandy" },
+              { value: "clay", label: "Clay" },
+              { value: "silt", label: "Silt" }
             ]}
           />
           <div className="md:col-span-2 flex justify-end space-x-3">
@@ -225,7 +248,15 @@ const resetForm = () => {
                   <span className="font-medium">
                     {farm.size} {farm.unit}
                   </span>
-                </div>
+</div>
+                {farm.soilType && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Soil Type:</span>
+                    <span className="font-medium capitalize">
+                      {farm.soilType}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Added:</span>
                   <span className="font-medium">

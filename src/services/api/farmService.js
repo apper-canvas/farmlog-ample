@@ -10,12 +10,14 @@ export const farmService = {
     try {
       const response = await apperClient.fetchRecords('farm_c', {
         fields: [
-          {"field": {"Name": "Id"}},
+{"field": {"Name": "Id"}},
           {"field": {"Name": "Name"}},
           {"field": {"Name": "name_c"}},
           {"field": {"Name": "size_c"}},
           {"field": {"Name": "unit_c"}},
           {"field": {"Name": "location_c"}},
+          {"field": {"Name": "soil_type_c"}},
+          {"field": {"Name": "current_amount_c"}},
           {"field": {"Name": "CreatedOn"}}
         ],
         orderBy: [{"fieldName": "CreatedOn", "sorttype": "DESC"}]
@@ -31,7 +33,9 @@ export const farmService = {
         name: farm.name_c || farm.Name,
         size: farm.size_c,
         unit: farm.unit_c,
-        location: farm.location_c,
+location: farm.location_c,
+        soilType: farm.soil_type_c,
+        currentAmount: farm.current_amount_c,
         createdAt: farm.CreatedOn
       }));
     } catch (error) {
@@ -44,12 +48,14 @@ export const farmService = {
     try {
       const response = await apperClient.getRecordById('farm_c', parseInt(id), {
         fields: [
-          {"field": {"Name": "Id"}},
+{"field": {"Name": "Id"}},
           {"field": {"Name": "Name"}},
           {"field": {"Name": "name_c"}},
           {"field": {"Name": "size_c"}},
           {"field": {"Name": "unit_c"}},
           {"field": {"Name": "location_c"}},
+          {"field": {"Name": "soil_type_c"}},
+          {"field": {"Name": "current_amount_c"}},
           {"field": {"Name": "CreatedOn"}}
         ]
       });
@@ -65,7 +71,9 @@ export const farmService = {
         name: farm.name_c || farm.Name,
         size: farm.size_c,
         unit: farm.unit_c,
-        location: farm.location_c,
+location: farm.location_c,
+        soilType: farm.soil_type_c,
+        currentAmount: farm.current_amount_c,
         createdAt: farm.CreatedOn
       };
     } catch (error) {
@@ -79,10 +87,12 @@ export const farmService = {
       const response = await apperClient.createRecord('farm_c', {
         records: [{
           Name: farmData.name,
-          name_c: farmData.name,
+name_c: farmData.name,
           size_c: parseFloat(farmData.size),
           unit_c: farmData.unit,
-          location_c: farmData.location
+          location_c: farmData.location,
+          soil_type_c: farmData.soilType,
+          current_amount_c: parseFloat(farmData.currentAmount) || 0
         }]
       });
 
@@ -103,8 +113,10 @@ export const farmService = {
           Id: created.Id,
           name: created.name_c || created.Name,
           size: created.size_c,
-          unit: created.unit_c,
+unit: created.unit_c,
           location: created.location_c,
+          soilType: created.soil_type_c,
+          currentAmount: created.current_amount_c,
           createdAt: created.CreatedOn
         };
       }
@@ -121,9 +133,11 @@ export const farmService = {
           Id: parseInt(id),
           Name: farmData.name,
           name_c: farmData.name,
-          size_c: parseFloat(farmData.size),
+size_c: parseFloat(farmData.size),
           unit_c: farmData.unit,
-          location_c: farmData.location
+          location_c: farmData.location,
+          soil_type_c: farmData.soilType,
+          current_amount_c: parseFloat(farmData.currentAmount) || 0
         }]
       });
 
@@ -145,7 +159,9 @@ export const farmService = {
           name: updated.name_c || updated.Name,
           size: updated.size_c,
           unit: updated.unit_c,
-          location: updated.location_c,
+location: updated.location_c,
+          soilType: updated.soil_type_c,
+          currentAmount: updated.current_amount_c,
           createdAt: updated.CreatedOn
         };
       }
