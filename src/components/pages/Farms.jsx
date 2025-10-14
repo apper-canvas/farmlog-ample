@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
+import Modal from "@/components/atoms/Modal";
 import FormField from "@/components/molecules/FormField";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
@@ -87,7 +88,7 @@ const Farms = () => {
     setShowAddForm(true);
   };
 
-  const resetForm = () => {
+const resetForm = () => {
     setFormData({
       name: "",
       size: "",
@@ -118,61 +119,60 @@ const Farms = () => {
       </div>
 
       {/* Add/Edit Form */}
-      {showAddForm && (
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            {editingFarm ? "Edit Farm" : "Add New Farm"}
-          </h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              label="Farm Name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="Enter farm name"
-              required
-            />
-            <FormField
-              label="Location"
-              value={formData.location}
-              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              placeholder="County, State"
-              required
-            />
-            <FormField
-              label="Size"
-              type="number"
-              step="0.1"
-              value={formData.size}
-              onChange={(e) => setFormData({ ...formData, size: e.target.value })}
-              placeholder="0.0"
-              required
-            />
-            <FormField
-              label="Unit"
-              type="select"
-              value={formData.unit}
-              onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-              options={[
-                { value: "acres", label: "Acres" },
-                { value: "hectares", label: "Hectares" },
-                { value: "square_feet", label: "Square Feet" }
-              ]}
-            />
-            <div className="md:col-span-2 flex justify-end space-x-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={resetForm}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">
-                {editingFarm ? "Update Farm" : "Add Farm"}
-              </Button>
-            </div>
-          </form>
-        </Card>
-      )}
+<Modal
+        isOpen={showAddForm}
+        onClose={resetForm}
+        title={editingFarm ? "Edit Farm" : "Add New Farm"}
+      >
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            label="Farm Name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="Enter farm name"
+            required
+          />
+          <FormField
+            label="Location"
+            value={formData.location}
+            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+            placeholder="County, State"
+            required
+          />
+          <FormField
+            label="Size"
+            type="number"
+            step="0.1"
+            value={formData.size}
+            onChange={(e) => setFormData({ ...formData, size: e.target.value })}
+            placeholder="0.0"
+            required
+          />
+          <FormField
+            label="Unit"
+            type="select"
+            value={formData.unit}
+            onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
+            options={[
+              { value: "acres", label: "Acres" },
+              { value: "hectares", label: "Hectares" },
+              { value: "square_feet", label: "Square Feet" }
+            ]}
+          />
+          <div className="md:col-span-2 flex justify-end space-x-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={resetForm}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">
+              {editingFarm ? "Update Farm" : "Add Farm"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Farms List */}
       {farms.length === 0 ? (
