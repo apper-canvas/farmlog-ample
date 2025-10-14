@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
+import Modal from "@/components/atoms/Modal";
 import FormField from "@/components/molecules/FormField";
 import ExpenseCard from "@/components/molecules/ExpenseCard";
 import Loading from "@/components/ui/Loading";
@@ -223,103 +224,98 @@ const Expenses = () => {
       )}
 
       {/* Add/Edit Form */}
-      {showAddForm && (
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            {editingExpense ? "Edit Expense" : "Add New Expense"}
-          </h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {!selectedFarm && (
-              <FormField
-                label="Farm"
-                type="select"
-                value={formData.farmId}
-                onChange={(e) => setFormData({ ...formData, farmId: e.target.value })}
-                required
-              >
-                <option value="">Select a farm</option>
-                {availableFarms.map((farm) => (
-                  <option key={farm.Id} value={farm.Id}>
-                    {farm.name} - {farm.location}
-                  </option>
-                ))}
-              </FormField>
-            )}
-            
+<Modal isOpen={showAddForm} onClose={resetForm} title={editingExpense ? "Edit Expense" : "Add New Expense"}>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {!selectedFarm && (
             <FormField
-              label="Category"
+              label="Farm"
               type="select"
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              options={[
-                { value: "seeds", label: "Seeds & Plants" },
-                { value: "equipment", label: "Equipment" },
-                { value: "supplies", label: "Supplies" },
-                { value: "labor", label: "Labor" },
-                { value: "fuel", label: "Fuel" },
-                { value: "utilities", label: "Utilities" },
-                { value: "maintenance", label: "Maintenance" },
-                { value: "other", label: "Other" }
-              ]}
-              className={!selectedFarm ? "" : "md:col-span-2"}
-            />
-
-            <FormField
-              label="Amount"
-              type="number"
-              step="0.01"
-              value={formData.amount}
-              onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-              placeholder="0.00"
+              value={formData.farmId}
+              onChange={(e) => setFormData({ ...formData, farmId: e.target.value })}
               required
-            />
+            >
+              <option value="">Select a farm</option>
+              {availableFarms.map((farm) => (
+                <option key={farm.Id} value={farm.Id}>
+                  {farm.name} - {farm.location}
+                </option>
+              ))}
+            </FormField>
+          )}
+          
+          <FormField
+            label="Category"
+            type="select"
+            value={formData.category}
+            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+            options={[
+              { value: "seeds", label: "Seeds & Plants" },
+              { value: "equipment", label: "Equipment" },
+              { value: "supplies", label: "Supplies" },
+              { value: "labor", label: "Labor" },
+              { value: "fuel", label: "Fuel" },
+              { value: "utilities", label: "Utilities" },
+              { value: "maintenance", label: "Maintenance" },
+              { value: "other", label: "Other" }
+            ]}
+            className={!selectedFarm ? "" : "md:col-span-2"}
+          />
 
-            <FormField
-              label="Date"
-              type="date"
-              value={formData.date}
-              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              required
-            />
+          <FormField
+            label="Amount"
+            type="number"
+            step="0.01"
+            value={formData.amount}
+            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+            placeholder="0.00"
+            required
+          />
 
-            <FormField
-              label="Description"
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="What was this expense for?"
-              required
-              className="md:col-span-2"
-            />
+          <FormField
+            label="Date"
+            type="date"
+            value={formData.date}
+            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            required
+          />
 
-            <FormField
-              label="Payment Method"
-              type="select"
-              value={formData.paymentMethod}
-              onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
-              options={[
-                { value: "cash", label: "Cash" },
-                { value: "check", label: "Check" },
-                { value: "credit card", label: "Credit Card" },
-                { value: "debit card", label: "Debit Card" },
-                { value: "bank transfer", label: "Bank Transfer" }
-              ]}
-            />
+          <FormField
+            label="Description"
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            placeholder="What was this expense for?"
+            required
+            className="md:col-span-2"
+          />
 
-            <div className="md:col-span-2 flex justify-end space-x-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={resetForm}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">
-                {editingExpense ? "Update Expense" : "Add Expense"}
-              </Button>
-            </div>
-          </form>
-        </Card>
-      )}
+          <FormField
+            label="Payment Method"
+            type="select"
+            value={formData.paymentMethod}
+            onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
+            options={[
+              { value: "cash", label: "Cash" },
+              { value: "check", label: "Check" },
+              { value: "credit card", label: "Credit Card" },
+              { value: "debit card", label: "Debit Card" },
+              { value: "bank transfer", label: "Bank Transfer" }
+            ]}
+          />
+
+          <div className="md:col-span-2 flex justify-end space-x-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={resetForm}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">
+              {editingExpense ? "Update Expense" : "Add Expense"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Expenses List */}
       {expenses.length === 0 ? (
