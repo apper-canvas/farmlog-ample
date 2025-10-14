@@ -23,7 +23,7 @@ const Tasks = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [availableFarms, setAvailableFarms] = useState([]);
   const [availableCrops, setAvailableCrops] = useState([]);
-  const [filterStatus, setFilterStatus] = useState("all");
+const [filterStatus, setFilterStatus] = useState("all");
   const [formData, setFormData] = useState({
     farmId: "",
     cropId: "",
@@ -32,7 +32,8 @@ const Tasks = () => {
     dueDate: "",
     priority: "medium",
     recurring: false,
-    notes: ""
+    notes: "",
+    status: "To Do"
   });
 
   useEffect(() => {
@@ -121,7 +122,7 @@ const Tasks = () => {
 
   const handleEdit = (task) => {
     setEditingTask(task);
-    setFormData({
+setFormData({
       farmId: task.farmId,
       cropId: task.cropId || "",
       title: task.title,
@@ -129,7 +130,8 @@ const Tasks = () => {
       dueDate: task.dueDate,
       priority: task.priority,
       recurring: task.recurring,
-      notes: task.notes || ""
+      notes: task.notes || "",
+      status: task.status || "To Do"
     });
     setShowAddForm(true);
   };
@@ -143,7 +145,8 @@ const resetForm = () => {
       dueDate: "",
       priority: "medium",
       recurring: false,
-      notes: ""
+      notes: "",
+      status: "To Do"
     });
     setShowAddForm(false);
     setEditingTask(null);
@@ -157,6 +160,12 @@ const resetForm = () => {
         return tasks.filter(t => t.completed);
       case "overdue":
         return tasks.filter(t => !t.completed && new Date(t.dueDate) < new Date());
+      case "todo":
+        return tasks.filter(t => t.status === "To Do");
+      case "in-progress":
+        return tasks.filter(t => t.status === "In Progress");
+      case "done":
+        return tasks.filter(t => t.status === "Done");
       default:
         return tasks;
     }
@@ -197,9 +206,12 @@ const resetForm = () => {
           <div className="flex space-x-2">
             {[
               { value: "all", label: "All Tasks", count: tasks.length },
-              { value: "pending", label: "Pending", count: tasks.filter(t => !t.completed).length },
+{ value: "pending", label: "Pending", count: tasks.filter(t => !t.completed).length },
               { value: "completed", label: "Completed", count: tasks.filter(t => t.completed).length },
-              { value: "overdue", label: "Overdue", count: tasks.filter(t => !t.completed && new Date(t.dueDate) < new Date()).length }
+              { value: "overdue", label: "Overdue", count: tasks.filter(t => !t.completed && new Date(t.dueDate) < new Date()).length },
+              { value: "todo", label: "To Do", count: tasks.filter(t => t.status === "To Do").length },
+              { value: "in-progress", label: "In Progress", count: tasks.filter(t => t.status === "In Progress").length },
+              { value: "done", label: "Done", count: tasks.filter(t => t.status === "Done").length }
             ].map((filter) => (
               <button
                 key={filter.value}
@@ -300,6 +312,17 @@ const resetForm = () => {
             ]}
           />
 
+<FormField
+            label="Status"
+            type="select"
+            value={formData.status}
+            onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+            options={[
+              { value: "To Do", label: "To Do" },
+              { value: "In Progress", label: "In Progress" },
+              { value: "Done", label: "Done" }
+            ]}
+          />
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"
@@ -359,7 +382,7 @@ onClick: () => setShowAddForm(true),
       ) : (
         <>
           {/* Tasks Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card className="p-4">
               <div className="flex items-center space-x-3">
                 <div className="h-8 w-8 bg-info/10 rounded-lg flex items-center justify-center">
@@ -373,14 +396,27 @@ onClick: () => setShowAddForm(true),
             </Card>
             <Card className="p-4">
               <div className="flex items-center space-x-3">
-                <div className="h-8 w-8 bg-warning/10 rounded-lg flex items-center justify-center">
-                  <ApperIcon name="Clock" className="h-4 w-4 text-warning" />
+                <div className="h-8 w-8 bg-gray-400/10 rounded-lg flex items-center justify-center">
+                  <ApperIcon name="Circle" className="h-4 w-4 text-gray-400" />
                 </div>
                 <div>
                   <p className="text-lg font-semibold text-gray-900">
-                    {tasks.filter(t => !t.completed).length}
+                    {tasks.filter(t => t.status === "To Do").length}
                   </p>
-                  <p className="text-sm text-gray-600">Pending</p>
+                  <p className="text-sm text-gray-600">To Do</p>
+                </div>
+              </div>
+            </Card>
+            <Card className="p-4">
+              <div className="flex items-center space-x-3">
+                <div className="h-8 w-8 bg-info/10 rounded-lg flex items-center justify-center">
+                  <ApperIcon name="Clock" className="h-4 w-4 text-info" />
+                </div>
+                <div>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {tasks.filter(t => t.status === "In Progress").length}
+                  </p>
+                  <p className="text-sm text-gray-600">In Progress</p>
                 </div>
               </div>
             </Card>
@@ -391,22 +427,9 @@ onClick: () => setShowAddForm(true),
                 </div>
                 <div>
                   <p className="text-lg font-semibold text-gray-900">
-                    {tasks.filter(t => t.completed).length}
+                    {tasks.filter(t => t.status === "Done").length}
                   </p>
-                  <p className="text-sm text-gray-600">Completed</p>
-                </div>
-              </div>
-            </Card>
-            <Card className="p-4">
-              <div className="flex items-center space-x-3">
-                <div className="h-8 w-8 bg-error/10 rounded-lg flex items-center justify-center">
-                  <ApperIcon name="AlertTriangle" className="h-4 w-4 text-error" />
-                </div>
-                <div>
-                  <p className="text-lg font-semibold text-gray-900">
-                    {tasks.filter(t => !t.completed && new Date(t.dueDate) < new Date()).length}
-                  </p>
-                  <p className="text-sm text-gray-600">Overdue</p>
+                  <p className="text-sm text-gray-600">Done</p>
                 </div>
               </div>
             </Card>

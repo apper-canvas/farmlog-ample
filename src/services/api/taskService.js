@@ -10,7 +10,7 @@ export const taskService = {
     try {
       const response = await apperClient.fetchRecords('task_c', {
         fields: [
-          {"field": {"Name": "Id"}},
+{"field": {"Name": "Id"}},
           {"field": {"Name": "Name"}},
           {"field": {"Name": "title_c"}},
           {"field": {"Name": "type_c"}},
@@ -19,6 +19,7 @@ export const taskService = {
           {"field": {"Name": "completed_c"}},
           {"field": {"Name": "recurring_c"}},
           {"field": {"Name": "notes_c"}},
+          {"field": {"Name": "status_c"}},
           {"field": {"name": "farm_id_c"}, "referenceField": {"field": {"Name": "Name"}}},
           {"field": {"name": "crop_id_c"}, "referenceField": {"field": {"Name": "Name"}}}
         ],
@@ -31,7 +32,7 @@ export const taskService = {
       }
 
       return response.data.map(task => ({
-        Id: task.Id,
+Id: task.Id,
         farmId: task.farm_id_c?.Id?.toString() || "",
         cropId: task.crop_id_c?.Id?.toString() || "",
         title: task.title_c || task.Name,
@@ -40,7 +41,8 @@ export const taskService = {
         priority: task.priority_c,
         completed: task.completed_c || false,
         recurring: task.recurring_c || false,
-        notes: task.notes_c || ""
+        notes: task.notes_c || "",
+        status: task.status_c || "To Do"
       }));
     } catch (error) {
       console.error("Error fetching tasks:", error?.response?.data?.message || error);
@@ -51,7 +53,7 @@ export const taskService = {
   async getByFarmId(farmId) {
     try {
       const response = await apperClient.fetchRecords('task_c', {
-        fields: [
+fields: [
           {"field": {"Name": "Id"}},
           {"field": {"Name": "Name"}},
           {"field": {"Name": "title_c"}},
@@ -61,6 +63,7 @@ export const taskService = {
           {"field": {"Name": "completed_c"}},
           {"field": {"Name": "recurring_c"}},
           {"field": {"Name": "notes_c"}},
+          {"field": {"Name": "status_c"}},
           {"field": {"name": "farm_id_c"}, "referenceField": {"field": {"Name": "Name"}}},
           {"field": {"name": "crop_id_c"}, "referenceField": {"field": {"Name": "Name"}}}
         ],
@@ -74,7 +77,7 @@ export const taskService = {
       }
 
       return response.data.map(task => ({
-        Id: task.Id,
+Id: task.Id,
         farmId: task.farm_id_c?.Id?.toString() || "",
         cropId: task.crop_id_c?.Id?.toString() || "",
         title: task.title_c || task.Name,
@@ -83,7 +86,8 @@ export const taskService = {
         priority: task.priority_c,
         completed: task.completed_c || false,
         recurring: task.recurring_c || false,
-        notes: task.notes_c || ""
+        notes: task.notes_c || "",
+        status: task.status_c || "To Do"
       }));
     } catch (error) {
       console.error("Error fetching tasks by farm:", error?.response?.data?.message || error);
@@ -95,7 +99,7 @@ export const taskService = {
     try {
       const today = new Date().toISOString().split('T')[0];
       const response = await apperClient.fetchRecords('task_c', {
-        fields: [
+fields: [
           {"field": {"Name": "Id"}},
           {"field": {"Name": "Name"}},
           {"field": {"Name": "title_c"}},
@@ -105,6 +109,7 @@ export const taskService = {
           {"field": {"Name": "completed_c"}},
           {"field": {"Name": "recurring_c"}},
           {"field": {"Name": "notes_c"}},
+          {"field": {"Name": "status_c"}},
           {"field": {"name": "farm_id_c"}, "referenceField": {"field": {"Name": "Name"}}},
           {"field": {"name": "crop_id_c"}, "referenceField": {"field": {"Name": "Name"}}}
         ],
@@ -122,7 +127,7 @@ export const taskService = {
       }
 
       return response.data.map(task => ({
-        Id: task.Id,
+Id: task.Id,
         farmId: task.farm_id_c?.Id?.toString() || "",
         cropId: task.crop_id_c?.Id?.toString() || "",
         title: task.title_c || task.Name,
@@ -131,7 +136,8 @@ export const taskService = {
         priority: task.priority_c,
         completed: task.completed_c || false,
         recurring: task.recurring_c || false,
-        notes: task.notes_c || ""
+        notes: task.notes_c || "",
+        status: task.status_c || "To Do"
       }));
     } catch (error) {
       console.error("Error fetching upcoming tasks:", error?.response?.data?.message || error);
@@ -142,7 +148,7 @@ export const taskService = {
   async getById(id) {
     try {
       const response = await apperClient.getRecordById('task_c', parseInt(id), {
-        fields: [
+fields: [
           {"field": {"Name": "Id"}},
           {"field": {"Name": "Name"}},
           {"field": {"Name": "title_c"}},
@@ -152,6 +158,7 @@ export const taskService = {
           {"field": {"Name": "completed_c"}},
           {"field": {"Name": "recurring_c"}},
           {"field": {"Name": "notes_c"}},
+          {"field": {"Name": "status_c"}},
           {"field": {"name": "farm_id_c"}, "referenceField": {"field": {"Name": "Name"}}},
           {"field": {"name": "crop_id_c"}, "referenceField": {"field": {"Name": "Name"}}}
         ]
@@ -164,7 +171,7 @@ export const taskService = {
 
       const task = response.data;
       return {
-        Id: task.Id,
+Id: task.Id,
         farmId: task.farm_id_c?.Id?.toString() || "",
         cropId: task.crop_id_c?.Id?.toString() || "",
         title: task.title_c || task.Name,
@@ -173,7 +180,8 @@ export const taskService = {
         priority: task.priority_c,
         completed: task.completed_c || false,
         recurring: task.recurring_c || false,
-        notes: task.notes_c || ""
+        notes: task.notes_c || "",
+        status: task.status_c || "To Do"
       };
     } catch (error) {
       console.error("Error fetching task:", error?.response?.data?.message || error);
@@ -185,7 +193,7 @@ export const taskService = {
     try {
       const response = await apperClient.createRecord('task_c', {
         records: [{
-          Name: taskData.title,
+Name: taskData.title,
           farm_id_c: parseInt(taskData.farmId),
           crop_id_c: taskData.cropId ? parseInt(taskData.cropId) : undefined,
           title_c: taskData.title,
@@ -194,7 +202,8 @@ export const taskService = {
           priority_c: taskData.priority,
           completed_c: false,
           recurring_c: taskData.recurring || false,
-          notes_c: taskData.notes || ""
+          notes_c: taskData.notes || "",
+          status_c: taskData.status || "To Do"
         }]
       });
 
@@ -212,7 +221,7 @@ export const taskService = {
 
         const created = response.results[0].data;
         return {
-          Id: created.Id,
+Id: created.Id,
           farmId: created.farm_id_c?.Id?.toString() || taskData.farmId,
           cropId: created.crop_id_c?.Id?.toString() || taskData.cropId || "",
           title: created.title_c || created.Name,
@@ -221,7 +230,8 @@ export const taskService = {
           priority: created.priority_c,
           completed: created.completed_c || false,
           recurring: created.recurring_c || false,
-          notes: created.notes_c || ""
+          notes: created.notes_c || "",
+          status: created.status_c || "To Do"
         };
       }
     } catch (error) {
@@ -235,7 +245,7 @@ export const taskService = {
       const updatePayload = {
         Id: parseInt(id),
         Name: taskData.title
-      };
+};
 
       if (taskData.farmId) updatePayload.farm_id_c = parseInt(taskData.farmId);
       if (taskData.cropId) updatePayload.crop_id_c = parseInt(taskData.cropId);
@@ -246,6 +256,7 @@ export const taskService = {
       if (taskData.completed !== undefined) updatePayload.completed_c = taskData.completed;
       if (taskData.recurring !== undefined) updatePayload.recurring_c = taskData.recurring;
       if (taskData.notes !== undefined) updatePayload.notes_c = taskData.notes;
+      if (taskData.status) updatePayload.status_c = taskData.status;
 
       const response = await apperClient.updateRecord('task_c', {
         records: [updatePayload]
@@ -264,7 +275,7 @@ export const taskService = {
         }
 
         const updated = response.results[0].data;
-        return {
+return {
           Id: updated.Id,
           farmId: updated.farm_id_c?.Id?.toString() || taskData.farmId || "",
           cropId: updated.crop_id_c?.Id?.toString() || taskData.cropId || "",
@@ -274,7 +285,8 @@ export const taskService = {
           priority: updated.priority_c,
           completed: updated.completed_c || false,
           recurring: updated.recurring_c || false,
-          notes: updated.notes_c || ""
+          notes: updated.notes_c || "",
+          status: updated.status_c || "To Do"
         };
       }
     } catch (error) {
