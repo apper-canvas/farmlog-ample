@@ -13,6 +13,12 @@ import { cropService } from "@/services/api/cropService";
 import { farmService } from "@/services/api/farmService";
 import { toast } from "react-toastify";
 
+const { ApperClient } = window.ApperSDK;
+const apperClient = new ApperClient({
+  apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+  apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+});
+
 const Crops = () => {
   const { selectedFarm, farms } = useOutletContext();
   const [crops, setCrops] = useState([]);
@@ -61,9 +67,42 @@ const Crops = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Check if status changed during edit to generate new notes
+      if (editingCrop && formData.status !== editingCrop.status) {
+        try {
+          toast.info("Generating crop notes...");
+          
+          const response = await apperClient.functions.invoke(
+            import.meta.env.VITE_GENERATE_CROP_NOTES,
+            {
+              body: JSON.stringify({
+                cropName: formData.name,
+                variety: formData.variety,
+                stage: formData.stage,
+                status: formData.status
+              }),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+
+          if (response.success && response.notes) {
+            // Update formData with generated notes
+            formData.notes = response.notes;
+            toast.success("Notes generated successfully");
+          } else {
+            console.info(`apper_info: Got an error in this function: ${import.meta.env.VITE_GENERATE_CROP_NOTES}. The response body is: ${JSON.stringify(response)}.`);
+          }
+        } catch (error) {
+          console.info(`apper_info: Got this error in this function: ${import.meta.env.VITE_GENERATE_CROP_NOTES}. The error is: ${error.message}`);
+          // Continue with update even if note generation fails
+        }
+      }
+
       if (editingCrop) {
         await cropService.update(editingCrop.Id, formData);
         toast.success("Crop updated successfully");
