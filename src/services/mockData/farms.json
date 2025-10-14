@@ -1,0 +1,26 @@
+[
+  {
+    "Id": 1,
+    "name": "Sunny Acres Farm",
+    "size": 25.5,
+    "unit": "acres",
+    "location": "Riverside County, CA",
+    "createdAt": "2024-01-15T08:00:00Z"
+  },
+  {
+    "Id": 2,
+    "name": "Green Valley Ranch",
+    "size": 40.0,
+    "unit": "acres",
+    "location": "Fresno County, CA",
+    "createdAt": "2024-02-01T10:30:00Z"
+  },
+  {
+    "Id": 3,
+    "name": "Heritage Homestead",
+    "size": 12.8,
+    "unit": "acres",
+    "location": "Sonoma County, CA",
+    "createdAt": "2024-02-20T14:15:00Z"
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "Id": 1,
+    "farmId": "1",
+    "cropId": "1",
+    "title": "Water tomatoes",
+    "type": "watering",
+    "dueDate": "2024-04-25",
+    "priority": "high",
+    "completed": false,
+    "recurring": true,
+    "notes": "Deep watering in morning"
+  },
+  {
+    "Id": 2,
+    "farmId": "1",
+    "cropId": "2",
+    "title": "Check corn germination",
+    "type": "inspection",
+    "dueDate": "2024-04-26",
+    "priority": "medium",
+    "completed": false,
+    "recurring": false,
+    "notes": "Look for emerging shoots"
+  },
+  {
+    "Id": 3,
+    "farmId": "2",
+    "cropId": "3",
+    "title": "Harvest lettuce",
+    "type": "harvesting",
+    "dueDate": "2024-04-24",
+    "priority": "high",
+    "completed": true,
+    "recurring": false,
+    "notes": "Morning harvest for freshness"
+  },
+  {
+    "Id": 4,
+    "farmId": "2",
+    "cropId": "4",
+    "title": "Thin carrot seedlings",
+    "type": "maintenance",
+    "dueDate": "2024-04-27",
+    "priority": "medium",
+    "completed": false,
+    "recurring": false,
+    "notes": "Space 2 inches apart"
+  },
+  {
+    "Id": 5,
+    "farmId": "1",
+    "cropId": "1",
+    "title": "Apply fertilizer",
+    "type": "fertilizing",
+    "dueDate": "2024-04-28",
+    "priority": "low",
+    "completed": false,
+    "recurring": true,
+    "notes": "Organic compost mix"
+  },
+  {
+    "Id": 6,
+    "farmId": "3",
+    "cropId": "5",
+    "title": "Transplant basil seedlings",
+    "type": "planting",
+    "dueDate": "2024-04-29",
+    "priority": "high",
+    "completed": false,
+    "recurring": false,
+    "notes": "Move to outdoor beds"
+  }
+]

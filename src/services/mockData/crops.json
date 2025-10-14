@@ -1,0 +1,57 @@
+[
+  {
+    "Id": 1,
+    "farmId": "1",
+    "name": "Tomatoes",
+    "variety": "Roma",
+    "plantedDate": "2024-03-15",
+    "expectedHarvest": "2024-06-15",
+    "stage": "growing",
+    "status": "healthy",
+    "notes": "First planting of the season"
+  },
+  {
+    "Id": 2,
+    "farmId": "1",
+    "name": "Corn",
+    "variety": "Sweet Corn",
+    "plantedDate": "2024-04-01",
+    "expectedHarvest": "2024-07-01",
+    "stage": "planted",
+    "status": "emerging",
+    "notes": "North field section"
+  },
+  {
+    "Id": 3,
+    "farmId": "2",
+    "name": "Lettuce",
+    "variety": "Romaine",
+    "plantedDate": "2024-03-01",
+    "expectedHarvest": "2024-05-01",
+    "stage": "harvest",
+    "status": "ready",
+    "notes": "Ready for market"
+  },
+  {
+    "Id": 4,
+    "farmId": "2",
+    "name": "Carrots",
+    "variety": "Purple Haze",
+    "plantedDate": "2024-02-15",
+    "expectedHarvest": "2024-05-15",
+    "stage": "growing",
+    "status": "healthy",
+    "notes": "Specialty variety for farmers market"
+  },
+  {
+    "Id": 5,
+    "farmId": "3",
+    "name": "Basil",
+    "variety": "Genovese",
+    "plantedDate": "2024-04-10",
+    "expectedHarvest": "2024-06-10",
+    "stage": "planted",
+    "status": "germinating",
+    "notes": "Greenhouse planting"
+  }
+]
