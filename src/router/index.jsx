@@ -8,9 +8,9 @@ const Farms = lazy(() => import("@/components/pages/Farms"));
 const Crops = lazy(() => import("@/components/pages/Crops"));
 const Tasks = lazy(() => import("@/components/pages/Tasks"));
 const Expenses = lazy(() => import("@/components/pages/Expenses"));
+const Income = lazy(() => import("@/components/pages/Income"));
 const Weather = lazy(() => import("@/components/pages/Weather"));
 const NotFound = lazy(() => import("@/components/pages/NotFound"));
-
 // Main routes configuration
 const mainRoutes = [
   {
@@ -51,6 +51,14 @@ const mainRoutes = [
     element: (
       <Suspense fallback={<div>Loading.....</div>}>
         <Expenses />
+</Suspense>
+    )
+  },
+  {
+    path: "income",
+    element: (
+      <Suspense fallback={<div>Loading.....</div>}>
+        <Income />
       </Suspense>
     )
   },
