@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
+import Modal from "@/components/atoms/Modal";
 import FormField from "@/components/molecules/FormField";
 import CropCard from "@/components/molecules/CropCard";
 import Loading from "@/components/ui/Loading";
@@ -146,102 +147,101 @@ const Crops = () => {
       </div>
 
       {/* Add/Edit Form */}
-      {showAddForm && (
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            {editingCrop ? "Edit Crop" : "Add New Crop"}
-          </h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {!selectedFarm && (
-              <FormField
-                label="Farm"
-                type="select"
-                value={formData.farmId}
-                onChange={(e) => setFormData({ ...formData, farmId: e.target.value })}
-                required
-              >
-                <option value="">Select a farm</option>
-                {availableFarms.map((farm) => (
-                  <option key={farm.Id} value={farm.Id}>
-                    {farm.name} - {farm.location}
-                  </option>
-                ))}
-              </FormField>
-            )}
-            
+<Modal
+        isOpen={showAddForm}
+        onClose={resetForm}
+        title={editingCrop ? "Edit Crop" : "Add New Crop"}
+      >
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {!selectedFarm && (
             <FormField
-              label="Crop Name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="e.g., Tomatoes, Corn, Lettuce"
-              required
-            />
-            <FormField
-              label="Variety"
-              value={formData.variety}
-              onChange={(e) => setFormData({ ...formData, variety: e.target.value })}
-              placeholder="e.g., Roma, Sweet Corn, Romaine"
-              required
-            />
-            <FormField
-              label="Planted Date"
-              type="date"
-              value={formData.plantedDate}
-              onChange={(e) => setFormData({ ...formData, plantedDate: e.target.value })}
-              required
-            />
-            <FormField
-              label="Expected Harvest"
-              type="date"
-              value={formData.expectedHarvest}
-              onChange={(e) => setFormData({ ...formData, expectedHarvest: e.target.value })}
-              required
-            />
-            <FormField
-              label="Growth Stage"
+              label="Farm"
               type="select"
-              value={formData.stage}
-              onChange={(e) => setFormData({ ...formData, stage: e.target.value })}
-              options={[
-                { value: "planted", label: "Planted" },
-                { value: "growing", label: "Growing" },
-                { value: "harvest", label: "Ready for Harvest" }
-              ]}
-            />
-            <FormField
-              label="Status"
-              type="select"
-              value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-              options={[
-                { value: "healthy", label: "Healthy" },
-                { value: "attention", label: "Needs Attention" },
-                { value: "struggling", label: "Struggling" }
-              ]}
-            />
-            <FormField
-              label="Notes"
-              type="textarea"
-              value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="Optional notes about this crop..."
-              className="md:col-span-2"
-            />
-            <div className="md:col-span-2 flex justify-end space-x-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={resetForm}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">
-                {editingCrop ? "Update Crop" : "Add Crop"}
-              </Button>
-            </div>
-          </form>
-        </Card>
-      )}
+              value={formData.farmId}
+              onChange={(e) => setFormData({ ...formData, farmId: e.target.value })}
+              required
+            >
+              <option value="">Select a farm</option>
+              {availableFarms.map((farm) => (
+                <option key={farm.Id} value={farm.Id}>
+                  {farm.name} - {farm.location}
+                </option>
+              ))}
+            </FormField>
+          )}
+          
+          <FormField
+            label="Crop Name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="e.g., Tomatoes, Corn, Lettuce"
+            required
+          />
+          <FormField
+            label="Variety"
+            value={formData.variety}
+            onChange={(e) => setFormData({ ...formData, variety: e.target.value })}
+            placeholder="e.g., Roma, Sweet Corn, Romaine"
+            required
+          />
+          <FormField
+            label="Planted Date"
+            type="date"
+            value={formData.plantedDate}
+            onChange={(e) => setFormData({ ...formData, plantedDate: e.target.value })}
+            required
+          />
+          <FormField
+            label="Expected Harvest"
+            type="date"
+            value={formData.expectedHarvest}
+            onChange={(e) => setFormData({ ...formData, expectedHarvest: e.target.value })}
+            required
+          />
+          <FormField
+            label="Growth Stage"
+            type="select"
+            value={formData.stage}
+            onChange={(e) => setFormData({ ...formData, stage: e.target.value })}
+            options={[
+              { value: "planted", label: "Planted" },
+              { value: "growing", label: "Growing" },
+              { value: "harvest", label: "Ready for Harvest" }
+            ]}
+          />
+          <FormField
+            label="Status"
+            type="select"
+            value={formData.status}
+            onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+            options={[
+              { value: "healthy", label: "Healthy" },
+              { value: "attention", label: "Needs Attention" },
+              { value: "struggling", label: "Struggling" }
+            ]}
+          />
+          <FormField
+            label="Notes"
+            type="textarea"
+            value={formData.notes}
+            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+            placeholder="Optional notes about this crop..."
+            className="md:col-span-2"
+          />
+          <div className="md:col-span-2 flex justify-end space-x-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={resetForm}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">
+              {editingCrop ? "Update Crop" : "Add Crop"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Crops List */}
       {crops.length === 0 ? (
