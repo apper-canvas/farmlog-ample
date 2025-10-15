@@ -1,127 +1,279 @@
-import mockData from '@/services/mockData/equipment.json';
+// Initialize ApperClient
+const { ApperClient } = window.ApperSDK;
+const apperClient = new ApperClient({
+  apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+  apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+});
 
-// Utility function for realistic delays
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const TABLE_NAME = 'equipments_c';
 
 export const equipmentService = {
   async getAll() {
     try {
-      await delay(300);
-      return [...mockData].sort((a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate));
+      const params = {
+        fields: [
+          { field: { Name: "Id" } },
+          { field: { Name: "Name" } },
+          { field: { Name: "farm_c" }, referenceField: { field: { Name: "Name" } } },
+          { field: { Name: "equipment_type_c" } },
+          { field: { Name: "manufacturer_c" } },
+          { field: { Name: "model_c" } },
+          { field: { Name: "purchase_date_c" } },
+          { field: { Name: "purchase_price_c" } },
+          { field: { Name: "condition_c" } },
+          { field: { Name: "notes_c" } }
+        ],
+        orderBy: [{ fieldName: "purchase_date_c", sorttype: "DESC" }],
+        pagingInfo: { limit: 1000, offset: 0 }
+      };
+
+      const response = await apperClient.fetchRecords(TABLE_NAME, params);
+
+      if (!response.success) {
+        console.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
     } catch (error) {
-      console.error("Error fetching equipments:", error);
+      console.error("Error fetching equipments:", error?.message || error);
       return [];
     }
   },
 
   async getByFarmId(farmId) {
     try {
-      await delay(300);
-      const filtered = mockData.filter(e => e.farmId.toString() === farmId.toString());
-      return [...filtered].sort((a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate));
+      const params = {
+        fields: [
+          { field: { Name: "Id" } },
+          { field: { Name: "Name" } },
+          { field: { Name: "farm_c" }, referenceField: { field: { Name: "Name" } } },
+          { field: { Name: "equipment_type_c" } },
+          { field: { Name: "manufacturer_c" } },
+          { field: { Name: "model_c" } },
+          { field: { Name: "purchase_date_c" } },
+          { field: { Name: "purchase_price_c" } },
+          { field: { Name: "condition_c" } },
+          { field: { Name: "notes_c" } }
+        ],
+        where: [
+          { FieldName: "farm_c", Operator: "EqualTo", Values: [parseInt(farmId)] }
+        ],
+        orderBy: [{ fieldName: "purchase_date_c", sorttype: "DESC" }],
+        pagingInfo: { limit: 1000, offset: 0 }
+      };
+
+      const response = await apperClient.fetchRecords(TABLE_NAME, params);
+
+      if (!response.success) {
+        console.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
     } catch (error) {
-      console.error("Error fetching equipments by farm:", error);
+      console.error("Error fetching equipments by farm:", error?.message || error);
       return [];
     }
   },
 
   async getTotalValue(farmId = null) {
     try {
-      await delay(200);
-      const equipments = farmId 
-        ? mockData.filter(e => e.farmId.toString() === farmId.toString())
-        : mockData;
-      
+      const params = {
+        fields: [
+          { field: { Name: "Id" } },
+          { field: { Name: "purchase_price_c" } }
+        ],
+        pagingInfo: { limit: 1000, offset: 0 }
+      };
+
+      if (farmId) {
+        params.where = [
+          { FieldName: "farm_c", Operator: "EqualTo", Values: [parseInt(farmId)] }
+        ];
+      }
+
+      const response = await apperClient.fetchRecords(TABLE_NAME, params);
+
+      if (!response.success) {
+        console.error(response.message);
+        return 0;
+      }
+
+      const equipments = response.data || [];
       return equipments.reduce((total, equipment) => {
-        if (equipment.status !== 'retired') {
-          return total + (equipment.purchasePrice || 0);
-        }
-        return total;
+        return total + (equipment.purchase_price_c || 0);
       }, 0);
     } catch (error) {
-      console.error("Error calculating equipment value:", error);
+      console.error("Error calculating equipment value:", error?.message || error);
       return 0;
     }
   },
 
   async getById(id) {
     try {
-      await delay(200);
-      const equipment = mockData.find(e => e.Id.toString() === id.toString());
-      if (!equipment) {
+      const params = {
+        fields: [
+          { field: { Name: "Id" } },
+          { field: { Name: "Name" } },
+          { field: { Name: "farm_c" }, referenceField: { field: { Name: "Name" } } },
+          { field: { Name: "equipment_type_c" } },
+          { field: { Name: "manufacturer_c" } },
+          { field: { Name: "model_c" } },
+          { field: { Name: "purchase_date_c" } },
+          { field: { Name: "purchase_price_c" } },
+          { field: { Name: "condition_c" } },
+          { field: { Name: "notes_c" } }
+        ]
+      };
+
+      const response = await apperClient.getRecordById(TABLE_NAME, id, params);
+
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message || "Equipment not found");
+      }
+
+      if (!response.data) {
         throw new Error("Equipment not found");
       }
-      return { ...equipment };
+
+      return response.data;
     } catch (error) {
-      console.error("Error fetching equipment:", error);
-      throw new Error("Equipment not found");
+      console.error("Error fetching equipment:", error?.message || error);
+      throw new Error(error?.message || "Equipment not found");
     }
   },
 
   async create(equipmentData) {
     try {
-      await delay(300);
-      const newEquipment = {
-        Id: Date.now(),
-        name: equipmentData.name,
-        farmId: parseInt(equipmentData.farmId),
-        category: equipmentData.category,
-        purchaseDate: equipmentData.purchaseDate,
-        purchasePrice: parseFloat(equipmentData.purchasePrice),
-        condition: equipmentData.condition,
-        status: equipmentData.status,
-        description: equipmentData.description
+      // Only include Updateable fields
+      const payload = {
+        Name: equipmentData.Name,
+        farm_c: parseInt(equipmentData.farm_c),
+        equipment_type_c: equipmentData.equipment_type_c,
+        purchase_date_c: equipmentData.purchase_date_c,
+        purchase_price_c: parseFloat(equipmentData.purchase_price_c),
+        condition_c: equipmentData.condition_c
       };
-      
-      mockData.push(newEquipment);
-      return { ...newEquipment };
+
+      // Add optional fields only if they have values
+      if (equipmentData.manufacturer_c) {
+        payload.manufacturer_c = equipmentData.manufacturer_c;
+      }
+      if (equipmentData.model_c) {
+        payload.model_c = equipmentData.model_c;
+      }
+      if (equipmentData.notes_c) {
+        payload.notes_c = equipmentData.notes_c;
+      }
+
+      const params = {
+        records: [payload]
+      };
+
+      const response = await apperClient.createRecord(TABLE_NAME, params);
+
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message || "Failed to create equipment");
+      }
+
+      if (response.results) {
+        const failed = response.results.filter(r => !r.success);
+        if (failed.length > 0) {
+          console.error(`Failed to create equipment:`, failed);
+          const errorMessage = failed[0].message || failed[0].errors?.[0] || "Failed to create equipment";
+          throw new Error(errorMessage);
+        }
+        return response.results[0].data;
+      }
+
+      throw new Error("Unexpected response format");
     } catch (error) {
-      console.error("Error creating equipment:", error);
+      console.error("Error creating equipment:", error?.message || error);
       throw error;
     }
   },
 
   async update(id, equipmentData) {
     try {
-      await delay(300);
-      const index = mockData.findIndex(e => e.Id.toString() === id.toString());
-      
-      if (index === -1) {
-        throw new Error("Equipment not found");
-      }
-      
-      mockData[index] = {
-        ...mockData[index],
-        name: equipmentData.name,
-        farmId: parseInt(equipmentData.farmId),
-        category: equipmentData.category,
-        purchaseDate: equipmentData.purchaseDate,
-        purchasePrice: parseFloat(equipmentData.purchasePrice),
-        condition: equipmentData.condition,
-        status: equipmentData.status,
-        description: equipmentData.description
+      // Only include Updateable fields
+      const payload = {
+        Id: parseInt(id),
+        Name: equipmentData.Name,
+        farm_c: parseInt(equipmentData.farm_c),
+        equipment_type_c: equipmentData.equipment_type_c,
+        purchase_date_c: equipmentData.purchase_date_c,
+        purchase_price_c: parseFloat(equipmentData.purchase_price_c),
+        condition_c: equipmentData.condition_c
       };
-      
-      return { ...mockData[index] };
+
+      // Add optional fields only if they have values
+      if (equipmentData.manufacturer_c) {
+        payload.manufacturer_c = equipmentData.manufacturer_c;
+      }
+      if (equipmentData.model_c) {
+        payload.model_c = equipmentData.model_c;
+      }
+      if (equipmentData.notes_c) {
+        payload.notes_c = equipmentData.notes_c;
+      }
+
+      const params = {
+        records: [payload]
+      };
+
+      const response = await apperClient.updateRecord(TABLE_NAME, params);
+
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message || "Failed to update equipment");
+      }
+
+      if (response.results) {
+        const failed = response.results.filter(r => !r.success);
+        if (failed.length > 0) {
+          console.error(`Failed to update equipment:`, failed);
+          const errorMessage = failed[0].message || failed[0].errors?.[0] || "Failed to update equipment";
+          throw new Error(errorMessage);
+        }
+        return response.results[0].data;
+      }
+
+      throw new Error("Unexpected response format");
     } catch (error) {
-      console.error("Error updating equipment:", error);
+      console.error("Error updating equipment:", error?.message || error);
       throw error;
     }
   },
 
   async delete(id) {
     try {
-      await delay(300);
-      const index = mockData.findIndex(e => e.Id.toString() === id.toString());
-      
-      if (index === -1) {
-        throw new Error("Equipment not found");
+      const params = {
+        RecordIds: [parseInt(id)]
+      };
+
+      const response = await apperClient.deleteRecord(TABLE_NAME, params);
+
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message || "Failed to delete equipment");
       }
-      
-      mockData.splice(index, 1);
+
+      if (response.results) {
+        const failed = response.results.filter(r => !r.success);
+        if (failed.length > 0) {
+          console.error(`Failed to delete equipment:`, failed);
+          const errorMessage = failed[0].message || "Failed to delete equipment";
+          throw new Error(errorMessage);
+        }
+        return true;
+      }
+
       return true;
     } catch (error) {
-      console.error("Error deleting equipment:", error);
+      console.error("Error deleting equipment:", error?.message || error);
       throw error;
     }
   }

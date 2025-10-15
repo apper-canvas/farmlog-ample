@@ -15,7 +15,7 @@ import { format } from "date-fns";
 import EquipmentCard from "@/components/molecules/EquipmentCard";
 
 const Equipments = () => {
-  const { selectedFarm, farms } = useOutletContext();
+const { selectedFarm, farms } = useOutletContext();
   const [equipments, setEquipments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -24,14 +24,15 @@ const Equipments = () => {
   const [availableFarms, setAvailableFarms] = useState([]);
   const [totalValue, setTotalValue] = useState(0);
   const [formData, setFormData] = useState({
-    farmId: "",
-    name: "",
-    category: "tractor",
-    purchaseDate: new Date().toISOString().split('T')[0],
-    purchasePrice: "",
-    condition: "good",
-    status: "active",
-    description: ""
+    farm_c: "",
+    Name: "",
+    equipment_type_c: "Tractor",
+    manufacturer_c: "",
+    model_c: "",
+    purchase_date_c: new Date().toISOString().split('T')[0],
+    purchase_price_c: "",
+    condition_c: "Good",
+    notes_c: ""
   });
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const Equipments = () => {
       setLoading(true);
       setError("");
       
-      const [equipmentsData, farmsData, totalValueData] = await Promise.all([
+const [equipmentsData, farmsData, totalValueData] = await Promise.all([
         selectedFarm ? equipmentService.getByFarmId(selectedFarm.Id) : equipmentService.getAll(),
         farms.length > 0 ? Promise.resolve(farms) : farmService.getAll(),
         equipmentService.getTotalValue(selectedFarm?.Id)
@@ -53,8 +54,8 @@ const Equipments = () => {
       setAvailableFarms(farmsData);
       setTotalValue(totalValueData);
       
-      if (selectedFarm && !formData.farmId) {
-        setFormData(prev => ({ ...prev, farmId: selectedFarm.Id.toString() }));
+if (selectedFarm && !formData.farm_c) {
+        setFormData(prev => ({ ...prev, farm_c: selectedFarm.Id.toString() }));
       }
     } catch (err) {
       setError("Failed to load equipments");
@@ -72,7 +73,7 @@ const Equipments = () => {
         purchasePrice: parseFloat(formData.purchasePrice)
       };
       
-      if (editingEquipment) {
+if (editingEquipment) {
         await equipmentService.update(editingEquipment.Id, equipmentData);
         toast.success("Equipment updated successfully");
       } else {
@@ -100,8 +101,8 @@ const Equipments = () => {
 
   const handleEdit = (equipment) => {
     setEditingEquipment(equipment);
-    setFormData({
-      farmId: equipment.farmId.toString(),
+setFormData({
+      farm_c: equipment.farm_c?.Id ? equipment.farm_c.Id.toString() : "",
       name: equipment.name,
       category: equipment.category,
       purchaseDate: equipment.purchaseDate,
@@ -115,8 +116,8 @@ const Equipments = () => {
 
   const resetForm = () => {
     setFormData({
-      farmId: selectedFarm ? selectedFarm.Id.toString() : "",
-      name: "",
+farm_c: selectedFarm ? selectedFarm.Id.toString() : "",
+      Name: "",
       category: "tractor",
       purchaseDate: new Date().toISOString().split('T')[0],
       purchasePrice: "",
@@ -128,7 +129,9 @@ const Equipments = () => {
     setEditingEquipment(null);
   };
 
-  const getFarmName = (farmId) => {
+const getFarmName = (farm_c) => {
+    // Handle both lookup object format and direct ID
+    const farmId = farm_c?.Id || farm_c;
     const farm = availableFarms.find(f => f.Id.toString() === farmId.toString());
     return farm ? farm.name : "Unknown Farm";
   };
@@ -240,7 +243,7 @@ const Equipments = () => {
               required
             >
               <option value="">Select a farm</option>
-              {availableFarms.map((farm) => (
+{availableFarms.map((farm) => (
                 <option key={farm.Id} value={farm.Id}>
                   {farm.name} - {farm.location}
                 </option>
@@ -359,7 +362,7 @@ const Equipments = () => {
       ) : (
         <div className="space-y-4">
           {equipments.map((equipment) => (
-            <div key={equipment.Id}>
+<div key={equipment.Id}>
               <EquipmentCard
                 equipment={equipment}
                 onEdit={handleEdit}
@@ -367,7 +370,7 @@ const Equipments = () => {
               />
               {!selectedFarm && (
                 <p className="text-xs text-gray-500 mt-1 ml-4">
-                  {getFarmName(equipment.farmId)}
+{getFarmName(equipment.farm_c)}
                 </p>
               )}
             </div>
