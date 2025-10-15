@@ -1,0 +1,134 @@
+[
+  {
+    "Id": 1,
+    "name": "John Deere 6155R Tractor",
+    "farmId": 1,
+    "category": "tractor",
+    "purchaseDate": "2022-03-15",
+    "purchasePrice": 125000,
+    "condition": "excellent",
+    "status": "active",
+    "description": "Primary field tractor with 155hp engine and advanced hydraulics"
+  },
+  {
+    "Id": 2,
+    "name": "Pivot Irrigation System",
+    "farmId": 1,
+    "category": "irrigation",
+    "purchaseDate": "2021-06-20",
+    "purchasePrice": 45000,
+    "condition": "good",
+    "status": "active",
+    "description": "Center pivot system covering 160 acres with GPS controls"
+  },
+  {
+    "Id": 3,
+    "name": "New Holland CR8.90 Combine",
+    "farmId": 2,
+    "category": "harvester",
+    "purchaseDate": "2023-08-10",
+    "purchasePrice": 425000,
+    "condition": "excellent",
+    "status": "active",
+    "description": "Modern combine harvester with 420hp engine and automated controls"
+  },
+  {
+    "Id": 4,
+    "name": "Kubota M7-172 Tractor",
+    "farmId": 2,
+    "category": "tractor",
+    "purchaseDate": "2020-11-05",
+    "purchasePrice": 95000,
+    "condition": "good",
+    "status": "active",
+    "description": "Utility tractor for general farm work and transport"
+  },
+  {
+    "Id": 5,
+    "name": "Drip Irrigation Kit",
+    "farmId": 3,
+    "category": "irrigation",
+    "purchaseDate": "2023-04-12",
+    "purchasePrice": 8500,
+    "condition": "excellent",
+    "status": "active",
+    "description": "Water-efficient drip system for specialty crops"
+  },
+  {
+    "Id": 6,
+    "name": "Ford F-350 Farm Truck",
+    "farmId": 1,
+    "category": "vehicle",
+    "purchaseDate": "2021-09-18",
+    "purchasePrice": 52000,
+    "condition": "good",
+    "status": "active",
+    "description": "Heavy-duty pickup for equipment transport and farm errands"
+  },
+  {
+    "Id": 7,
+    "name": "Grain Storage Bin",
+    "farmId": 2,
+    "category": "storage",
+    "purchaseDate": "2020-05-22",
+    "purchasePrice": 28000,
+    "condition": "fair",
+    "status": "active",
+    "description": "15,000 bushel capacity steel bin with aeration system"
+  },
+  {
+    "Id": 8,
+    "name": "Professional Tool Set",
+    "farmId": 1,
+    "category": "tools",
+    "purchaseDate": "2023-01-10",
+    "purchasePrice": 3500,
+    "condition": "excellent",
+    "status": "active",
+    "description": "Complete mechanics tool set for equipment maintenance"
+  },
+  {
+    "Id": 9,
+    "name": "Grain Dryer Unit",
+    "farmId": 2,
+    "category": "processing",
+    "purchaseDate": "2019-10-30",
+    "purchasePrice": 65000,
+    "condition": "fair",
+    "status": "maintenance",
+    "description": "Portable grain dryer for moisture control, currently being serviced"
+  },
+  {
+    "Id": 10,
+    "name": "Massey Ferguson 7719 Tractor",
+    "farmId": 3,
+    "category": "tractor",
+    "purchaseDate": "2018-07-14",
+    "purchasePrice": 78000,
+    "condition": "fair",
+    "status": "active",
+    "description": "Older utility tractor for light field work"
+  },
+  {
+    "Id": 11,
+    "name": "Cold Storage Facility",
+    "farmId": 3,
+    "category": "storage",
+    "purchaseDate": "2022-12-01",
+    "purchasePrice": 95000,
+    "condition": "excellent",
+    "status": "active",
+    "description": "Temperature-controlled storage for fresh produce"
+  },
+  {
+    "Id": 12,
+    "name": "International Harvester 1066",
+    "farmId": 1,
+    "category": "tractor",
+    "purchaseDate": "2015-04-20",
+    "purchasePrice": 18000,
+    "condition": "poor",
+    "status": "retired",
+    "description": "Vintage tractor kept for parts and restoration project"
+  }
+]

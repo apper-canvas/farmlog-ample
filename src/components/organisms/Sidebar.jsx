@@ -29,12 +29,13 @@ function Sidebar({ isOpen, onClose }) {
 }
 
 function SidebarContent({ onClose }) {
-  const menuItems = [
+const menuItems = [
     { path: '/', label: 'Dashboard', icon: 'LayoutDashboard' },
     { path: '/farms', label: 'Farms', icon: 'Building' },
     { path: '/crops', label: 'Crops', icon: 'Leaf' },
     { path: '/tasks', label: 'Tasks', icon: 'CheckSquare' },
     { path: '/expenses', label: 'Expenses', icon: 'Receipt' },
+    { path: '/equipments', label: 'Equipments', icon: 'Wrench' },
     { path: '/income', label: 'Income', icon: 'DollarSign' },
     { path: '/weather', label: 'Weather', icon: 'Cloud' }
   ];
