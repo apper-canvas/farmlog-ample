@@ -23,7 +23,7 @@ const { selectedFarm, farms } = useOutletContext();
   const [editingEquipment, setEditingEquipment] = useState(null);
   const [availableFarms, setAvailableFarms] = useState([]);
   const [totalValue, setTotalValue] = useState(0);
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     farm_c: "",
     Name: "",
     equipment_type_c: "Tractor",
@@ -103,13 +103,14 @@ if (editingEquipment) {
     setEditingEquipment(equipment);
 setFormData({
       farm_c: equipment.farm_c?.Id ? equipment.farm_c.Id.toString() : "",
-      name: equipment.name,
-      category: equipment.category,
-      purchaseDate: equipment.purchaseDate,
-      purchasePrice: equipment.purchasePrice.toString(),
-      condition: equipment.condition,
-      status: equipment.status,
-      description: equipment.description
+      Name: equipment.Name || "",
+      equipment_type_c: equipment.equipment_type_c || "Tractor",
+      manufacturer_c: equipment.manufacturer_c || "",
+      model_c: equipment.model_c || "",
+      purchase_date_c: equipment.purchase_date_c || new Date().toISOString().split('T')[0],
+      purchase_price_c: equipment.purchase_price_c ? equipment.purchase_price_c.toString() : "",
+      condition_c: equipment.condition_c || "Good",
+      notes_c: equipment.notes_c || ""
     });
     setShowAddForm(true);
   };
@@ -118,22 +119,24 @@ setFormData({
     setFormData({
 farm_c: selectedFarm ? selectedFarm.Id.toString() : "",
       Name: "",
-      category: "tractor",
-      purchaseDate: new Date().toISOString().split('T')[0],
-      purchasePrice: "",
-      condition: "good",
-      status: "active",
-      description: ""
+      equipment_type_c: "Tractor",
+      manufacturer_c: "",
+      model_c: "",
+      purchase_date_c: new Date().toISOString().split('T')[0],
+      purchase_price_c: "",
+      condition_c: "Good",
+      notes_c: ""
     });
     setShowAddForm(false);
     setEditingEquipment(null);
   };
 
 const getFarmName = (farm_c) => {
-    // Handle both lookup object format and direct ID
-    const farmId = farm_c?.Id || farm_c;
+    // Handle both lookup object format and direct ID with null safety
+    const farmId = farm_c?.Id || farm_c || '';
+    if (!farmId) return "Unknown Farm";
     const farm = availableFarms.find(f => f.Id.toString() === farmId.toString());
-    return farm ? farm.name : "Unknown Farm";
+    return farm ? farm.Name : "Unknown Farm";
   };
 
   const getEquipmentsByCategory = () => {
@@ -238,8 +241,8 @@ const getFarmName = (farm_c) => {
             <FormField
               label="Farm"
               type="select"
-              value={formData.farmId}
-              onChange={(e) => setFormData({ ...formData, farmId: e.target.value })}
+value={formData.farm_c}
+              onChange={(e) => setFormData({ ...formData, farm_c: e.target.value })}
               required
             >
               <option value="">Select a farm</option>
@@ -253,8 +256,8 @@ const getFarmName = (farm_c) => {
           
           <FormField
             label="Equipment Name"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+value={formData.Name}
+            onChange={(e) => setFormData({ ...formData, Name: e.target.value })}
             placeholder="e.g., John Deere Tractor"
             required
             className={!selectedFarm ? "" : "md:col-span-2"}
@@ -263,8 +266,8 @@ const getFarmName = (farm_c) => {
           <FormField
             label="Category"
             type="select"
-            value={formData.category}
-            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+value={formData.equipment_type_c}
+            onChange={(e) => setFormData({ ...formData, equipment_type_c: e.target.value })}
             options={[
               { value: "tractor", label: "Tractor" },
               { value: "harvester", label: "Harvester" },
@@ -280,8 +283,8 @@ const getFarmName = (farm_c) => {
           <FormField
             label="Purchase Date"
             type="date"
-            value={formData.purchaseDate}
-            onChange={(e) => setFormData({ ...formData, purchaseDate: e.target.value })}
+value={formData.purchase_date_c}
+            onChange={(e) => setFormData({ ...formData, purchase_date_c: e.target.value })}
             required
           />
 
@@ -289,8 +292,8 @@ const getFarmName = (farm_c) => {
             label="Purchase Price"
             type="number"
             step="0.01"
-            value={formData.purchasePrice}
-            onChange={(e) => setFormData({ ...formData, purchasePrice: e.target.value })}
+value={formData.purchase_price_c}
+            onChange={(e) => setFormData({ ...formData, purchase_price_c: e.target.value })}
             placeholder="0.00"
             required
           />
@@ -298,8 +301,8 @@ const getFarmName = (farm_c) => {
           <FormField
             label="Condition"
             type="select"
-            value={formData.condition}
-            onChange={(e) => setFormData({ ...formData, condition: e.target.value })}
+value={formData.condition_c}
+            onChange={(e) => setFormData({ ...formData, condition_c: e.target.value })}
             options={[
               { value: "excellent", label: "Excellent" },
               { value: "good", label: "Good" },
@@ -322,8 +325,8 @@ const getFarmName = (farm_c) => {
 
           <FormField
             label="Description"
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+value={formData.notes_c}
+            onChange={(e) => setFormData({ ...formData, notes_c: e.target.value })}
             placeholder="Details about the equipment"
             required
             className="md:col-span-2"
