@@ -61,8 +61,8 @@ const EquipmentCard = ({ equipment, onEdit, onDelete }) => {
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-medium text-gray-900">{equipment.name}</h3>
-              <span className="text-lg font-semibold text-gray-900">
-                ${equipment.purchasePrice.toLocaleString()}
+<span className="text-lg font-semibold text-gray-900">
+                ${equipment.purchasePrice?.toLocaleString() ?? '0'}
               </span>
             </div>
             
