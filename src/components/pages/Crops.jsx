@@ -20,7 +20,7 @@ const apperClient = new ApperClient({
 });
 
 const Crops = () => {
-  const { selectedFarm, farms } = useOutletContext();
+const { selectedFarm, farms } = useOutletContext();
   const [crops, setCrops] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

@@ -10,7 +10,7 @@ import { weatherService } from "@/services/api/weatherService";
 import { format } from "date-fns";
 
 const Weather = () => {
-  const { weather: contextWeather } = useOutletContext();
+const { weather: contextWeather } = useOutletContext();
   const [weather, setWeather] = useState(contextWeather);
   const [loading, setLoading] = useState(!contextWeather);
   const [error, setError] = useState("");

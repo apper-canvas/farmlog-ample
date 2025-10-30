@@ -10,7 +10,6 @@ const Layout = () => {
   const [selectedFarm, setSelectedFarm] = useState(null);
   const [farms, setFarms] = useState([]);
   const [weather, setWeather] = useState(null);
-
   useEffect(() => {
     const loadFarms = async () => {
       try {
@@ -53,7 +52,7 @@ const Layout = () => {
           
           <main className="flex-1 overflow-auto">
             <div className="p-4 lg:p-8 max-w-7xl mx-auto">
-              <Outlet context={{ selectedFarm, farms, weather }} />
+<Outlet context={{ selectedFarm, farms, weather }} />
             </div>
           </main>
         </div>

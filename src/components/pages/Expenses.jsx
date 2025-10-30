@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { format, startOfMonth, endOfMonth } from "date-fns";
 
 const Expenses = () => {
-  const { selectedFarm, farms } = useOutletContext();
+const { selectedFarm, farms } = useOutletContext();
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

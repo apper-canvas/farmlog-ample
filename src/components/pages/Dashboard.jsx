@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { format } from "date-fns";
 
 const Dashboard = () => {
-  const { selectedFarm, weather } = useOutletContext();
+const { selectedFarm, weather } = useOutletContext();
   const navigate = useNavigate();
   
   const [crops, setCrops] = useState([]);

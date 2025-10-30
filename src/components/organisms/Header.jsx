@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { clearUser } from "@/store/userSlice";
-import { cn } from "@/utils/cn";
 import ApperIcon from "@/components/ApperIcon";
-import Farms from "@/components/pages/Farms";
 import Button from "@/components/atoms/Button";
+import Farms from "@/components/pages/Farms";
+import { cn } from "@/utils/cn";
+import { clearUser } from "@/store/userSlice";
 
 const Header = ({ onMenuClick, selectedFarm, farms, onFarmSelect, weather }) => {
   const [showFarmSelect, setShowFarmSelect] = useState(false);
