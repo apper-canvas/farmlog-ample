@@ -35,7 +35,7 @@
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background-color: #faf8f5;
+  background-color: #e8f5e9;
   color: #1f2937;
 }
 
@@ -45,7 +45,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f5f1ed;
+  background: #e0f2e0;
 }
 
 ::-webkit-scrollbar-thumb {
